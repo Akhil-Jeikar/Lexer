@@ -43,11 +43,17 @@ public:
 
     void Tokeniser()
     {
+        size_t fun_off;
         // pre remove all the forward whitespaces
         Check_For_Irregularities();
+        fun_off = functionchecker();
+        std::cout << "End";
+        std::cout << pos << "tokeniser end_pos\n";
+
         while (pos < input.length())
         {
-            functionchecker();
+            pos++;
+            std::cout << input[pos];
         }
     }
 
@@ -81,10 +87,11 @@ private:
             exit(1);
         }
     }
-    void functionchecker()
+    size_t functionchecker()
     {
-        int s = pos; // write a refernce to the start of the function identifier
-        int e = pos; // write a end refernce to track the end of the function identifier
+        size_t option = 0; // Default
+        int s = pos;       // write a refernce to the start of the function identifier
+        int e = pos;       // write a end refernce to track the end of the function identifier
         while (s < input.length() && !std::isspace(input[pos]))
         {
             pos++;
@@ -92,55 +99,13 @@ private:
         }
         // check if the function is in the assigned functions
         std::string User_Value = input.substr(s, e);
-        int v = 0;
-        for (const auto &[grp, Assigned_funcs] : typelist)
-        {
-            if (Assigned_funcs.find(User_Value) != Assigned_funcs.end())
-            {
-                if (grp == "DDL")
-                {
-                    v = 1;
-                    break;
-                }
-                if (grp == "DML")
-                {
-                    v = 2;
-                    break;
-                }
-                if (grp == "DQL")
-                {
-                    v = 3;
-                    break;
-                }
-            }
-        }
-        // return error for invalid functions
-        if (v == 0)
-        {
 
-            std::cout << "INVALID FUNCTION NAME";
-            exit(1);
-        }
-        else
-        {
-            switch (v)
-            {
-            case 1:
-                std::cout << "DDL";
-                break;
-            case 2:
-                std::cout << "DML";
-                break;
-            case 3:
-                std::cout << "DQL";
-                break;
-            }
-        }
+        return option;
     }
 };
 int main()
 {
-    command::string a = "INSERT";
+    command::string a = "CREATE a db called dharshan";
     lexer lex(a);
     lex.Tokeniser();
 }
